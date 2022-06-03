@@ -37,6 +37,16 @@ Route::group(['namespace' => 'SuperAdmin', 'prefix' => 'superAdmin', 'as' => 'su
         Route::post('add-edit-admin/{id?}', 'SuperAdminController@addEditAdmin')->name('add.edit.admin');
         Route::post('add-edit-access/{id?}', 'SuperAdminController@access')->name('add.edit.access');
 
+        // // route for  choose 
+        Route::get('choose', 'ChooseController@choose')->name('choose');
+        Route::post('add-edit-choose/{id?}', 'ChooseController@addEditChoose')->name('add.edit.choose');
+        Route::get('delete-choose/{id?}', 'ChooseController@deleteChoose')->name('delete.choose');
+
+        // // route for  tour type 
+        Route::get('tour-type', 'TourTypeController@tourType')->name('tour.type');
+        Route::post('add-edit-tour-type/{id?}', 'TourTypeController@addEditTourType')->name('add.edit.tour.type');
+        Route::get('delete-tour-type/{id?}', 'TourTypeController@deleteTourType')->name('delete.tour.type');
+
 
         // Category
         Route::get('categories', 'CategoryController@categories')->name('categories');
@@ -64,6 +74,11 @@ Route::group(['namespace' => 'SuperAdmin', 'prefix' => 'superAdmin', 'as' => 'su
         Route::post('post-update-status/{id}', 'PostController@updateStatus')->name('post.update.status');
 
 
+
+        // route for contact 
+        Route::match(['get', 'post'], 'edit-contact/{id?}', 'ContactController@editContact')->name('edit.contact');
+
+
  
     });
 });
@@ -79,38 +94,18 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'],fun
         Route::post('check-current-password', 'AdminController@checkCurrentPassword');
         Route::post('update-current-password', 'AdminController@updateCurrentPassword')->name('update.current.password');
         Route::match(['get', 'post'], 'update-admin-details', 'AdminController@updateAdminDetails')->name('update.admin.details');
+     
+        // post 
+        Route::get('post', 'PostController@post')->name('post');
+        Route::match(['get', 'post'], 'add-edit-post/{id?}', 'PostController@addEditPost')->name('add.edit.post');
+        Route::match(['get', 'post'], 'add-post/{id?}', 'PostController@add')->name('add.post');
+        Route::match(['get', 'post'], 'edit-post/{id?}', 'PostController@edit')->name('edit.post');
+        Route::get('delete-post/{id?}', 'PostController@edit');
+        Route::match(['get', 'post'], 'add-images/{id?}', 'PostController@addImages')->name('add.post.images');
+        Route::get('add-images/delete-image/{id}', 'PostController@deleteImages');
 
-        // user route 
-        Route::get('user', 'AdminController@viewUser')->name('user');
-        Route::post('add', 'AdminController@add')->name('add.user');
-        Route::post('edit/{id}', 'AdminController@edit')->name('edit.user');
-        Route::get('delete-user/{id}', 'AdminController@deleteUser');
 
-        Route::get('all-admins', 'AdminController@admin')->name('details');
-        Route::post('add-edit-admin/{id?}', 'AdminController@addEditAdmin')->name('add.edit.admin');
-        Route::get('delete-admin/{id?}', 'AdminController@delete');
-        Route::post('add-edit-access/{id?}', 'AdminController@access')->name('add.edit.access');
-
-        // banner 
-        Route::get('banner', 'BannerController@banner')->name('banner');
-        Route::post('update-banner-status', 'BannerController@updateBannerStatus');
-        Route::post('add-banner', 'BannerController@add')->name('add.banner');
-        Route::post('edit-banner/{id}', 'BannerController@edit')->name('edit.banner');
-        Route::get('delete-banner/{id}', 'BannerController@delete')->name('delete.banner');
-
-        // category
-        Route::get('categories', 'CategoryController@categories')->name('categories');
-        Route::post('update-category-status', 'CategoryController@updateCategoryStatus');
-        Route::match(['get', 'post'], 'add-edit-category/{id?}', 'CategoryController@addEditCategory')->name('add.edit.category');
-        Route::post('append-categories-level', 'CategoryController@appendCategoryLevel');
-        Route::get('delete-category/{id?}', 'CategoryController@deleteCategory')->name('delete-category');
-        Route::get('add-edit-category/delete-category-image/{id?}', 'CategoryController@deleteCategoryImage');
-
-        // testimonial 
-        Route::get('tesimonial', 'TestimonialController@testimonial')->name('testimonial');
-        Route::match(['get', 'post'], 'add-edit-testimonial/{id?}', 'TestimonialController@addEditTestimonail')->name('add.edit.testimonial');
-        Route::get('delete-testimonial/{id?}', 'TestimonialController@deleteTestimonail')->name('delete.testimonial');
-
+  
         Route::get('read-all-notification', function(){
             auth('admin')->user()->unreadNotifications->markAsRead(); 
             return redirect()->back();
@@ -130,12 +125,21 @@ Route::post('/comment', 'PostController@addComment')->name('comment');
 
 
 Route::group(['middleware' => ['auth']], function() {
-    Route::post('/call-waiter', 'HomeController@callWaiter');
+    Route::get('/cart', 'OrderController@cart')->name('cart');
+    Route::post('/cart-delete/{id?}', 'OrderController@cartDelete')->name('cart-delete');
+    Route::post('update-cart-item-quantity', 'OrderController@updateCart');
+    Route::post('add-cart', 'OrderController@addCart')->name('add.cart');
+    Route::match(['get', 'post'],'checkout', 'OrderController@checkout')->name('checkout');
+    Route::post('/place-order', 'OrderController@placeOder')->name('place.order');
+
+
+
+    // route for account 
+    Route::get('account', 'UserController@account')->name('account');
+    Route::post('update-user-password', 'UserController@updateCurrentPassword')->name('update.user.password');
+    Route::post('update-user-detail', 'UserController@updateUserDetail')->name('update.user.detail');
     Route::get('/logout','UserController@logout')->name('logout');
-    Route::get('/cart', 'CartController@cart')->name('cart');
-    Route::post('/cart-delete/{id?}', 'CartController@cartDelete')->name('cart-delete');
-    Route::post('update-cart-item-quantity', 'CartController@updateCart');
-    Route::post('add-cart', 'CartController@addCart')->name('add.cart');
+    
     // Route::post('add-order', 'OrderController@addOrder')->name('add.order');
     // Route::post('payment', 'OrderController@payment')->name('payment');
 
@@ -163,11 +167,6 @@ Route::match(['get', 'post'],'register','UserController@register')->name('regist
 // Route::match(['get', 'post'],'login', 'UserController@login')->name('login');
 
 
-// Route::get('verify', 'UserController@register');
-
-
-// Route for front end 
-
 Route::get('qr-code-g', function () {
   
     $qr_code = rand(111,99999);
@@ -176,10 +175,6 @@ Route::get('qr-code-g', function () {
     $link = "https://qrmenu.summitp.com.np/menu/$qr_code";
       \QRCode::text($link)->setErrorCorrectionLevel("H")->setOutfile($file)->png();
 
-
-
-
-//   return view('qrCode');
 });
 
 

@@ -33,7 +33,7 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Category</h3>
-             <a href="{{route('superAdmin.add.edit.category')}}" style="max-width: 150px; float:right; display:inline-block;" class="btn btn-block btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add Category</a>
+             <a href="{{route('superAdmin.add.edit.category')}}" style="width: auto; float:right; display:inline-block;" class="btn btn-block btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add Category</a>
             </div>
             <div class="card-body">
               <table id="categories" class="table table-bordered table-striped  text-center">

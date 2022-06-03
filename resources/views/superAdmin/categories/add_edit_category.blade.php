@@ -68,10 +68,10 @@
                   @else value="{{old('category')}}"
                   @endif>
                 </div>
-                <div id="appendCategoriesLevel">
+                {{-- <div id="appendCategoriesLevel">
                     @include('superAdmin.categories.append_categoreis_level')
                 </div>
-                
+                 --}}
                 <div class="form-group">
                     <label for="url">Url*</label>
                     <input type="text" class="form-control" id="url" name="url" placeholder="Enter Url"

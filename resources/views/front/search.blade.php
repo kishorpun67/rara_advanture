@@ -11,8 +11,8 @@
       <h1 class="breadCrumb_title"> Water Adventure</h1>
       <div class="breadcumb-inner">
         <ul>
-          <li><a href="{{route('home')}}" class="breadCrumb_link">Home</a></li>
-          <li><span>List</span></li>
+          <li><a href="{{route('home')}}" class="breadCrumb_link">HOME</a></li>
+          <li><span>{{$categoy}}</span></li>
         </ul>
       </div>
     </div>
@@ -24,85 +24,69 @@
 <section class="package-section section_wrapper">
   <div class="container elementor-widget-container">
     <div class="row">
-      {{-- <div class="col-sm-3">
+      <div class="col-sm-3">
         <aside class="filter_category_sidebar">
           <div class="filter_category_wrapper">
             <h2 class="filter-title">Filter</h2>
             <label class="label_title">Price:</label>
             <div class="filter_item form-group price_filter">
-              <input type="text" class="form-control" placeholder="Min" size="5" value=""  maxlength="" minlength="">
-              <input type="text" class="form-control" placeholder="Max" size="5" value=""  maxlength="" minlength="">
-              <button type="button" role="button" class="btn btn-go"> Go </button>
+              {{-- <form action="javascript:" id="price_range"> --}}
+              <input type="text" class="form-control" id="min_price" placeholder="Min" size="5" value=""  maxlength="" minlength="">
+              <input type="text" class="form-control" id="max_price" placeholder="Max" size="5" value=""  maxlength="" minlength="">
+              <button type="button" role="button" id="price_range" class="btn btn-go"> Go </button>
+            {{-- </form> --}}
             </div>
-            <div class="filter_item form-group negotiable_filter">
-              <label class="label_title">Price Negotiable:</label>
-              <label>
-                <input type="radio" value="Yes" id="" name="p-neg">
-                <span>Yes</span> </label>
-              <label>
-                <input type="radio" value="No" name="p-neg"  id="">
-                <span>No</span> </label>
-              <label>
-                <input type="radio" value="Fixed Price" name="p-neg" id="">
-                <span>Fixed Price</span> </label>
+            <div class="filter_item form-group location_filter">
+              <label class="label_title">Choose Location:</label>
+              <input type="text" class="form-control autocomplete" placeholder="Location" id="get_location"  >
             </div>
             <div class="filter_item form-group date_filter">
               <label class="label_title">Date:</label>
-              <input type="date" class="form-control" name="date">
+              <input type="date" class="form-control" name="name" placeholder="Tile">
             </div>
+            <div class="filter_item form-group negotiable_filter">
+              <label class="label_title">Price Type:</label>
+              <label>
+                <input type="checkbox" value="Negotiable" class="price_type"  name="p-neg"  id="">
+                <span>Negotiable</span> </label>
+              <label>
+                <input type="checkbox" value="Fixed" class="price_type"  name="p-neg" id="">
+                <span>Fixed </span> </label>
+            </div>
+            
             <div class="filter_item form-group type_filter">
               <label for="room">Types</label>
-              <div class="select_dropdown">
-                <select class="form-control" name="tour-types">
-                  <option value="Business">Business</option>
-                  <option value="Economy"  selected="selected">Economy</option>
-                  <option value="VIP" >VIP</option>
-                  <option value="Family">Family</option>
-                </select>
-              </div>
+              @foreach ($types as $item)
+                  
+              <label>
+                <input type="checkbox" value="{{$item->id}}" class="type"  name="p-neg"  id="">
+                <span>{{$item->type}}</span> 
+              </label>
+              @endforeach
             </div>
           </div>
         </aside>
-      </div> --}}
-      <div class="col-sm-12">
+      </div>
+      <div class="col-sm-9">
         <div class="portfolio-grid">
-          {{-- <div class="filter_item form-group filter_sort">
+          <div class="filter_item form-group filter_sort">
             <label class="label_title">Sort by</label>
             <div class="select_dropdown">
-              <select class="form-control" name="sort-type">
-                <option value="lth">Price: Low to High</option>
-                <option value="htl">Price: High to Low</option>
-                <option value="ascending"> Name: Ascending</option>
-                <option value="descending"> Name: Descending</option>
-                <option value="most-visited"> Most Visited </option>
+              <input type="hidden" name="url" id="url" value="{{$categoy}}" category_id=0>
+              <select class="form-control" name="sort-type" id="sort">
+                <option value="">Select</option>
+                <option value="low_to_high">Price: Low to High</option>
+                <option value="high_to_low">Price: High to Low</option>
+                <option value="ascending"> Name: A to Z</option>
+                <option value="descending"> Name: Z to A</option>
+                {{-- <option value="most_visited"> Most Visited </option> --}}
               </select>
             </div>
-          </div> --}}
-          <div class="row special_package">
-            @foreach ($posts as $item)
-                
-            <div class="col-sm-4 portfolio-item">
-              <div class="single_package"> <a href="{{ route('post.detail', $item->url) }}">
-                <figure class="pkg-img"> <img src="{{asset($item->image)}}"> 
-                  <!--<div class="box_caption">
-                  <h3>Everest B.C &amp; Gokyo Lakes</h3>
-                </div>--> 
-                  
-                </figure>
-                </a>
-                <figcaption class="expedition_caption">
-                  <div class="expedition_wrapper">
-                    {{-- <h4 class="collection">Collection</h4> --}}
-                    <h4 class="pkg-title">{{$item->title}}</h4>
-                    <p>{{$item->details}}</p>
-                    <div class="tour-review"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star-o" aria-hidden="true"></i> <i class="fa fa-star-o" aria-hidden="true"></i> </span> <span class="reviews-count">(3)</span> </div>
-                    <span class="pkg-price">Rs. {{$item->price}}</span> </div>
-                </figcaption>
-              </div>
-            </div>
-            @endforeach
-
           </div>
+         <span class="appendAjaxList">
+           @include('front.ajaxListing')
+         </span>
+         
         </div>
       </div>
     </div>

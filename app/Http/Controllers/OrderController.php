@@ -19,12 +19,63 @@ use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
+    public function cart()
+    {
+        $carts = Cart::where(['user_id'=>auth()->user()->id])->get();
+        return view('front.cart', compact('carts'));
+    }
+    public function addCart()
+    {
+        $data = request()->all();
+        $cart = new Cart();
+        $cart->user_id = auth()->user()->id;
+        $cart->post_id = $data['post_id'];
+        $cart->title = $data['title'];
+        $cart->price = $data['price'];
+        $cart->image = $data['image'];
+        $cart->save();
+        return redirect()->back();
+    }
+    public function checkout()
+    {
+        if(request()->isMethod('post')){
+            $data = request()->all();
+            $rules = [
+                'name' => 'required|regex:/^[\pL\s\-]+$/u',
+                'number' =>'required|numeric',
+                'address'=> 'required',
+                // 'image' =>'image:jpeg, png, bmp, gif,jpg',
+            ];
 
-    public function addOrder()
+            $customMessages = [
+                'name.required' => 'Name is required',
+                'name.alpha' => 'alpha charcter is required',
+                'number.required' => 'Number is required',
+                'number.numeric' => 'Enter Valid number',
+                'address.required' => 'Address is required',
+                'image.image' =>'file must be image',
+            ];
+            $this->validate(request(), $rules, $customMessages);
+            User::where('email',auth()->user()->email)->update([
+                'name'=>$data['name'],
+                'number' =>$data['number'],
+                'address' =>$data['address'],
+                'country' =>$data['country'],
+                'email' =>$data['email'],
+                'city' =>$data['city'],
+            ]);
+            $carts = Cart::where(['user_id'=>auth()->user()->id])->get();
+            return view('front.order', compact('carts'));
+        }
+        $countries  = DB::table('country')->get();
+        return view('front.checkout', compact('countries'));
+    }
+
+    public function placeOder()
     {
         // return session()->get('admin_id');
-        $data = request()->all();
-        $carts = Cart::where(['admin_id'=> session()->get('admin_id'), 'user_id'=>auth()->user()->id])->get();
+       return $data = request()->all();
+        $carts = Cart::where(['user_id'=>auth()->user()->id])->get();
         //  $carts;
         foreach($carts as $cart)
         {

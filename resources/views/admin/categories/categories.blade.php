@@ -41,7 +41,6 @@
                 <tr>
                   <th>ID</th>
                   <th>Category</th>
-                  <th>Parent Category</th>
                   <th>URL</th>
                   <th>Status</th>
                   <th>Action</th>
@@ -49,15 +48,9 @@
                 </thead>
                 <tbody>
                @forelse($categories as $data)
-                @if(!isset($data->parentcategory->category))
-                  <?php $parent_category = "Root"; ?>
-                @else
-                  <?php $parent_category = $data->parentcategory->category; ?>
-                @endif
                 <tr>
                   <td >{{$data->id}}</td>
                   <td>{{$data->category}}</td>
-                  <td>{{$parent_category}}</td>
                   <td>{{$data->url}}</td>
                   <td>
                       @if($data->status==1)

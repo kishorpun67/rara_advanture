@@ -37,60 +37,8 @@
               </p>
             </a>
           </li>
-          @if(Session::get('page')=="setting" || Session::get('page')=="updateAdminDetail" || Session::get('page')=="admin_roles" )
-           <?php $active = "active";
-           $menuOpen="menu-open"; ?>
-            @else
-            <?php $active = "";
-            $menuOpen=""; ?>
-          @endif
-          <li class="nav-item has-treeview {{$menuOpen ??''}} ">
-            <a href="#" class="nav-link {{$active}}">
-              <i class="fas fa-cogs"></i>
-              <p>
-                Settings
-                <i class="fas fa-angle-left right"></i>
-                <span class="right badge badge-danger"></span>
-              </p>
-            </a>
-
-            @if(Session::get('page')=="setting")
-           <?php $active = "active"; ?>
-            @else
-            <?php $active = ""; ?>
-            @endif
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('superAdmin.settings')}}" class="nav-link {{$active}}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Update Admin Password</p>
-                </a>
-              </li>
-              @if(Session::get('page')=="updateAdminDetail")
-              <?php $active = "active"; ?>
-              @else
-              <?php $active = ""; ?>
-              @endif
-              <li class="nav-item">
-                <a href="{{route('superAdmin.update.admin.details')}}" class="nav-link {{$active}}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Update Admin Details</p>
-                </a>
-              </li>
-              @if(Session::get('page')=="admin_roles")
-              <?php $active = "active"; ?>
-              @else
-              <?php $active = ""; ?>
-              @endif
-              <li class="nav-item">
-                <a href="{{route('superAdmin.details')}}" class="nav-link {{$active}}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Roles & Premssion</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          @if(Session::get('page')=="category" || Session::get('page')=="banner" || Session::get('page')=="testimonial" ||  Session::get('page')=="post")
+         
+          @if(Session::get('page')=="category" || Session::get('page')=="choose" || Session::get('page')=="tour_type" || Session::get('page')=="banner" || Session::get('page')=="testimonial" ||  Session::get('page')=="post")
            <?php $active = "active";
            $menuOpen="menu-open"; ?>
             @else
@@ -120,7 +68,29 @@
                   <p>View Banner</p>
                 </a>
               </li>
-                 @if(Session::get('page')=="category")
+              @if(Session::get('page')=="choose")
+              <?php $active = "active"; ?>
+               @else
+               <?php $active = ""; ?>
+               @endif
+              <li class="nav-item">
+                <a href="{{route('superAdmin.choose')}}" class="nav-link {{$active}}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Choose Us</p>
+                </a>
+              </li>
+              @if(Session::get('page')=="tour_type")
+              <?php $active = "active"; ?>
+               @else
+               <?php $active = ""; ?>
+               @endif
+              <li class="nav-item">
+                <a href="{{route('superAdmin.tour.type')}}" class="nav-link {{$active}}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tour Type</p>
+                </a>
+              </li>
+                @if(Session::get('page')=="category")
               <?php $active = "active"; ?>
                 @else
                 <?php $active = ""; ?>
@@ -166,6 +136,73 @@
               </li> --}}
             </ul>
           </li>
+          @if(Session::get('page')=="contact")
+          <?php $active = "active"; ?>
+           @else
+           <?php $active = ""; ?>
+         @endif
+         <li class="nav-item">
+           <a href="{{route('superAdmin.edit.contact')}}" class="nav-link {{$active}}">
+            <i class="fa fa-address-book" aria-hidden="true"></i>
+            <p>
+               Contact
+             </p>
+           </a>
+         </li>
+          @if(Session::get('page')=="setting" || Session::get('page')=="updateAdminDetail" || Session::get('page')=="admin_roles" )
+          <?php $active = "active";
+          $menuOpen="menu-open"; ?>
+           @else
+           <?php $active = "";
+           $menuOpen=""; ?>
+         @endif
+         <li class="nav-item has-treeview {{$menuOpen ??''}} ">
+           <a href="#" class="nav-link {{$active}}">
+             <i class="fas fa-cogs"></i>
+             <p>
+               Settings
+               <i class="fas fa-angle-left right"></i>
+               <span class="right badge badge-danger"></span>
+             </p>
+           </a>
+
+           @if(Session::get('page')=="setting")
+          <?php $active = "active"; ?>
+           @else
+           <?php $active = ""; ?>
+           @endif
+           <ul class="nav nav-treeview">
+             <li class="nav-item">
+               <a href="{{route('superAdmin.settings')}}" class="nav-link {{$active}}">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Update Admin Password</p>
+               </a>
+             </li>
+             @if(Session::get('page')=="updateAdminDetail")
+             <?php $active = "active"; ?>
+             @else
+             <?php $active = ""; ?>
+             @endif
+             <li class="nav-item">
+               <a href="{{route('superAdmin.update.admin.details')}}" class="nav-link {{$active}}">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Update Admin Details</p>
+               </a>
+             </li>
+             @if(Session::get('page')=="admin_roles")
+             <?php $active = "active"; ?>
+             @else
+             <?php $active = ""; ?>
+             @endif
+             <li class="nav-item">
+               <a href="{{route('superAdmin.details')}}" class="nav-link {{$active}}">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Roles & Premssion</p>
+               </a>
+             </li>
+           </ul>
+         </li>
+     
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

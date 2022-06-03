@@ -9,21 +9,21 @@ use Session;
 use App\Admin\Post;
 use Image;
 use App\Admin\Type;
+use App\TourType;
+use App\PostImage;
 
 class PostController extends Controller
 {
-    public function item()
+    public function post()
     {
         if(auth('admin')->user()->parent_id > 0){
             $admin_id = auth('admin')->user()->parent_id;
         }else{
             $admin_id = auth('admin')->user()->id;
         }
-        $categories = Category::with('subcategories')->where(['parent_id' =>0])->get();
-        $item = Post::with(['category'])->where('admin_id', auth('admin')->user()->id)->get();
-        $types = Type::get();
+        $post = Post::orderBy('id','desc')->with(['category'])->where('admin_id', auth('admin')->user()->id)->get();
         Session::flash("page", 'post');
-        return view('admin.item.item', compact('categories', 'item', 'types'));
+        return view('admin.post.view_post', compact('post'));
     }
     
     public function updatePostStatus()
@@ -39,172 +39,163 @@ class PostController extends Controller
             return response()->json(['status' =>$status,'item_id' =>$data['item_id']]);
         }
     }
-
-    public function add(Request $request)
+    public function addEditPost(Request $request, $id=null)
     {
-        $data = $request->all();
         if(auth('admin')->user()->parent_id > 0){
             $admin_id = auth('admin')->user()->parent_id;
         }else{
             $admin_id = auth('admin')->user()->id;
         }
-        // dd($data);
-        $rules = [
-            'category_id' => 'required',
-            'name' =>'required',
-            'price' =>'required',
-            'url' =>'required',
-
-        ];
-
-        $customMessages = [
-            'category_id.required' => 'Please select category',
-            'name.required' => 'Item name field is required',
-            'price.required' => 'price field is required',
-            'url.required' => 'Url field is required',
-
-        ];
-        $this->validate($request, $rules, $customMessages);
-
-        if(empty($data['description'])){
-            $data['description']='';
-        }
-        if(empty($data['meta_title']))
-        {
-            $data['meta_title'] = "";
-        }
-        if(empty($data['meta_description']))
-        {
-            $data['meta_description'] = "";
-        }
-        if(empty($data['meta_keywords']))
-        {
-            $data['meta_keywords'] = "";
-        }
-        $post = new Post;
-        $post->admin_id = $admin_id;
-        $post->category_id =  $data['category_id'];
-        $post->type_id =  $data['type_id'];
-        $post->expire_days =  $data['expire_days'];
-        $post->price_type =  $data['price_type'];
-        $post->title = $data['name'];
-        $post->details = $data['description'];
-        $post->price = $data['price'];
-        $post->url = $data['url'];
-        $post->confirm_status = "New";
-        $post->meta_title = $data['meta_title'];
-        $post->meta_description = $data['meta_description'];
-        $post->meta_keywords = $data['meta_keywords'];
-
-        $post->status = 1;
-        if(empty($data['image'])){
-            $data['image']='';
-            $imagePath = "";
-        }
-        if($data['image']){
-            $image_tmp = $data['image'];
-            // dd($image_tmp);
-            if($image_tmp->isValid())
-            {
-                // get extension
-                $extension = $image_tmp->getClientOriginalExtension();
-                // generate new image name
-                $imageName = rand(111,99999).'.'.$extension;
-                $imagePath = 'image/item'.$imageName;
-                $result = Image::make($image_tmp)->addsave($imagePath);
-                // dd($result);
-
-            }
-        }
-        $post->image = $imagePath;
-        $post->save();
-        return redirect()->back()->with('success_message', 'Item has been added successfully!');
-    }
-
-    public function edit(Request $request, $id)
-    {
-        $data = $request->all();
-        $rules = [
-            'category_id' => 'required',
-            'name' =>'required',
-            'price' =>'required',
-            'url' =>'required',
-
-        ];
-
-        $customMessages = [
-            'category_id.required' => 'Please select category',
-            'name.required' => 'Item name field is required',
-            'price.required' => 'Price field is required',
-            'url.required' => 'Url field is required',
-
-        ];
-        $this->validate($request, $rules, $customMessages);
-        if(auth('admin')->user()->parent_id > 0){
-            $admin_id = auth('admin')->user()->parent_id;
+        if($id=="") {
+            $title = "Add Post";
+            $button ="Submit";
+            $post = new Post;
+            $postData = array();
+            $message = "Post has been added sucessfully";
         }else{
-            $admin_id = auth('admin')->user()->id;
+            $title = "Edit Post";
+            $button ="Update";
+            $postData = Post::where('admin_id',auth('admin')->user()->id)->where('id',$id)->first();
+            $postData= json_decode(json_encode($postData),true);
+            $post = Post::find($id);
+            $message = "Post has been updated sucessfully";
         }
-        if(empty($data['description'])){
-            $data['description']='';
-        }
-        
-        if(empty($data['meta_title']))
-        {
-            $data['meta_title'] = "";
-        }
-        if(empty($data['meta_description']))
-        {
-            $data['meta_description'] = "";
-        }
-        if(empty($data['meta_keywords']))
-        {
-            $data['meta_keywords'] = "";
-        }
-        $post =  Post::find($id);
-        if(empty($data['image']) && !empty($data['old_image'])){
-            $imagePath = $data['old_image'];
-        }
-        if(empty($data['old_image']))
-        {
-            $imagePath = "";
-        }
+        if($request->isMethod('post')) {
+            $data = $request->all();
+            // dd($data);
+            $data = $request->all();
+            $rules = [
+                'category_id' => 'required',
+                'title' =>'required',
+                'price' =>'required',
+                'url' =>'required',
+                'type_id'=>'required',
+                'url'=>'required',
+                'price_type'=>'required',
+                'expire_days'=>'required',
+                
+    
+            ];
+    
+            $customMessages = [
+                'category_id.required' => 'Please select category',
+                'title.required' => 'Title field is required',
+                'price.required' => 'Price field is required',
+                'url.required' => 'Url field is required',
+                'type_id.required' => 'Tour Type field is required',
+                'url.required' => 'Url field is required',
+                'price_type.required' => 'Price Type field is required',
+                'expire_days.required' => 'Please select days',
 
-        if(!empty($data['image'])){
-            $image_tmp = $data['image'];
-            // dd($image_tmp);
-            if($image_tmp->isValid())
+
+
+    
+            ];
+            $this->validate($request, $rules, $customMessages);
+           
+            if(empty($data['description']))
             {
-                // get extension
-                $extension = $image_tmp->getClientOriginalExtension();
-                // generate new image name
-                $imageName = rand(111,99999).'.'.$extension;
-                $imagePath = 'image/item'.$imageName;
-                $result = Image::make($image_tmp)->save($imagePath);
-                // dd($result);
+                $data['description'] = "";
             }
+            if(empty($data['meta_title']))
+            {
+                $data['meta_title'] = "";
+            }
+            if(empty($data['meta_description']))
+            {
+                $data['meta_description'] = "";
+            }
+            if(empty($data['meta_keywords']))
+            {
+                $data['meta_keywords'] = "";
+            }
+            if(!empty($data['image'])){
+                $image_tmp = $data['image'];
+                // dd($image_tmp);
+                if($image_tmp->isValid())
+                {
+                    // get extension
+                    $extension = $image_tmp->getClientOriginalExtension();
+                    // generate new image name
+                    $imageName = rand(111,99999).'.'.$extension;
+                    $imagePath = 'image/post'.$imageName;
+                    $result = Image::make($image_tmp)->save($imagePath);
+                    $post->image = $imagePath;
+                }
+            }
+            $post->admin_id = $admin_id;
+            $post->type_id =  $data['type_id'];
+            $post->category_id =  $data['category_id'];
+            $post->expire_days =  $data['expire_days'];
+            $post->price_type =  $data['price_type'];
+            $post->title = $data['title'];
+            $post->details = $data['description'];
+            $post->price = $data['price'];
+            $post->url = $data['url'];
+            $post->meta_title = $data['meta_title'];
+            $post->meta_description = $data['meta_description'];
+            $post->meta_keywords = $data['meta_keywords'];
+            $post->save();
+            Session::flash('success_message', $message);
+            // return redirect('su/categories');
+            return redirect()->route('admin.post');
         }
-        $post->admin_id = $admin_id;
-        $post->type_id =  $data['type_id'];
-        $post->category_id =  $data['category_id'];
-        $post->expire_days =  $data['expire_days'];
-        $post->price_type =  $data['price_type'];
-        $post->title = $data['name'];
-        $post->details = $data['description'];
-        $post->price = $data['price'];
-        $post->url = $data['url'];
-        $post->meta_title = $data['meta_title'];
-        $post->meta_description = $data['meta_description'];
-        $post->meta_keywords = $data['meta_keywords'];
-
-        $post->image = $imagePath;
-        $post->save();
-
-        return redirect()->back()->with('success_message', 'Item has been updated successfully!');
+        $categories = Category::get();
+        $types  =TourType::get();
+        Session::flash("page", 'post');
+        return view('admin.post.add_edit_post', compact('title','button','postData','categories','types'));
     }
+
+    
     public function delete($id)
     {
         Post::where('id', $id)->delete();
         return redirect()->back()->with('success_message', 'Item has been deleted successfully!');
+    }
+
+    public function addImages(Request $request, $id)
+    {
+        if($request->isMethod('post')) {
+            $data = $request->all();
+            if($request->hasFile('image')) {
+                $file =  $request->file('image');
+                    // get extension
+                    $extension = $file->getClientOriginalExtension();
+                    // generate new image name
+
+                    $image = New PostImage;
+                    $imageName = rand(111,99999).'.'.$extension;
+                    $large_image_path = 'image/post/'.$imageName; 
+
+                    Image::make($file)->save($large_image_path);
+
+                    $image->post_id = $data['post_id'];
+                    $image->image = $large_image_path;
+                    $image->save();
+            }
+            return redirect()->back()->with('success_message', 'Image has been added successfully!');
+        }
+        $posttDetails = Post::with('images')->find($id);
+        Session::flash('page', 'post');
+        return view('admin.post.add_post_image', compact('posttDetails'));
+    }
+
+    public function deleteImages($id=null)
+    {
+        $postImage= Post::select('image')->where('id',$id)->first();
+
+        // Get image path
+        $postImagePath = 'image/post';
+     
+        if(!empty($postImage->image) && file_exists($postImagePath)){
+
+           
+            if(file_exists($postImage->image)) {
+                unlink($postImage->image);
+            }
+        }
+        $id = PostImage::find($id);
+        $id->delete();
+        return redirect()->back()->with('success_message', 'Post Image has been delete successfully!');
     }
 }

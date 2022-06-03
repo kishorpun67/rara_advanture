@@ -55,9 +55,8 @@
             </div>
             
             <div class="filter_item form-group type_filter">
-              <label for="room">Types</label>
+              <label for="room">Tour Types</label>
               @foreach ($types as $item)
-                  
               <label>
                 <input type="checkbox" value="{{$item->id}}" class="type"  name="p-neg"  id="">
                 <span>{{$item->type}}</span> 
@@ -72,7 +71,7 @@
           <div class="filter_item form-group filter_sort">
             <label class="label_title">Sort by</label>
             <div class="select_dropdown">
-              <input type="hidden" name="url" id="url" value="{{$categoy->url}}">
+              <input type="hidden" name="url" id="url" value="{{$categoy->url}}" category_id={{$categoy->id}}>
               <select class="form-control" name="sort-type" id="sort">
                 <option value="">Select</option>
                 <option value="low_to_high">Price: Low to High</option>

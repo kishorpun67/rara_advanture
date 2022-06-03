@@ -1,15 +1,10 @@
  @extends('layouts.superAdmin_layout.superAdmin_layout')
 @section('content')
 <?php 
-use App\OrderDetail;
 use App\User;
 
 
-$total = OrderDetail::sum('total');
 $user = User::count();
-$total_order = OrderDetail::sum('quantity');
-$cancel_order = OrderDetail::where('cancel', 0)->sum('quantity');
-$cancel_sales = OrderDetail::where('cancel', 0)->sum('total');
 
 
 

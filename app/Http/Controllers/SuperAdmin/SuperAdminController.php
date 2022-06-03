@@ -61,6 +61,10 @@ class SuperAdminController extends Controller
                 return redirect()->back();
             }
         }
+        if(auth('superAdmin')->check())
+        {
+            return redirect('superAdmin/dashboard');
+        }
         return  view('superAdmin.superAdmin_login');
     }
 

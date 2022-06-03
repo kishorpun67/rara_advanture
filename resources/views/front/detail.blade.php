@@ -26,34 +26,33 @@
           <div id="carousel" class="carousel bs-slider fade  control-round indicators-line" data-ride="carousel" data-pause="hover" 
            data-interval="false">
             <div class="carousel-inner" role="listbox">
-              <div class="item active"> <img src="{{ asset($posts->image) }}"> </div>
-              <div class="item"> <img src="{{ asset($posts->image) }}"> </div>
-              <div class="item"> <img src="{{ asset($posts->image) }}"> </div>
-              <div class="item"> <img src="{{ asset($posts->image) }}"> </div>
-              <div class="item"> <img src="{{ asset($posts->image) }}"> </div>
+              <div class="item active"> <img src="{{ asset($posts->image) }}" class="mainImage"> </div>
             </div>
                         <!-- Left Control --> 
-      <a class="left carousel-control" href="#carousel" role="button" data-slide="prev"> <span class="fa fa-angle-left" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a> 
+      {{-- <a class="left carousel-control" href="#carousel" role="button" data-slide="prev"> <span class="fa fa-angle-left" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a>  --}}
       
       <!-- Right Control --> 
-      <a class="right carousel-control" href="#carousel" role="button" data-slide="next"> <span class="fa fa-angle-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> 
+      {{-- <a class="right carousel-control" href="#carousel" role="button" data-slide="next"> <span class="fa fa-angle-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a>  --}}
           </div>      
           <div class="clearfix clear">
-          
+            @if (!$posts->images->isEmpty())
+
             <div id="thumbcarousel" class="carousel slide" data-interval="false">   <!-- /thumbcarousel start--> 
             
-            
+
               <div class="carousel-inner"> <!-- /carousel-inner start--> 
-                <div class="item active">
-                  <div data-target="#carousel" data-slide-to="0" class="thumb"> <img src="{{ asset('frontend/images/img5.jpg') }}"></div>
-                  <div data-target="#carousel" data-slide-to="1" class="thumb"> <img src="{{ asset('frontend/images/expedition4.png') }}"></div>
-                  <div data-target="#carousel" data-slide-to="2" class="thumb"> <img src="{{ asset('frontend/images/urgent-action-requested-rug-ocean-acidification_3011.jpg') }}"></div>
-                </div>
-                <div class="item">
-                  <div data-target="#carousel" data-slide-to="3" class="thumb"> <img src="{{ asset('frontend/images/pexels-photo-9953821.jpeg') }}"></div>
-                  <div data-target="#carousel" data-slide-to="4" class="thumb"> <img src="{{ asset('frontend/images/up_trip5.jpg') }}"></div>
-                  <div data-target="#carousel" data-slide-to="0" class="thumb"> <img src="{{ asset('frontend/images/img5.jpg') }}"></div>
-                </div>
+                <?php 
+                $i=1;
+                  ?>
+                  @foreach ($posts->images->chunk(3) as $chunk)
+                  <div class="item @if($i==1) active @endif">
+                    @foreach ($chunk as $item)
+                        <div data-target="#carousel" data-slide-to="{{$item->id}}" class="thumb"> <img class="changeImage" src="{{ asset($item->image) }}"></div>
+                    @endforeach
+                  </div>
+                  <?php  $i++ ?>
+
+                  @endforeach
               </div>
               <!-- /carousel-innerend --> 
               
@@ -63,7 +62,9 @@
                  <!-- Right Control --> 
               <a class="right carousel-control" href="#thumbcarousel" role="button" data-slide="next"><i class="fa fa-angle-right" aria-hidden="true"></i> </a>
                </div>
-            <!-- /thumbcarousel end--> 
+            <!-- /thumbcarousel end-->
+            @endif
+ 
             
           </div>
           
@@ -71,72 +72,129 @@
           <summary class="tour-summary">
    
           <p>{{ $posts->details }}</p> 
-    </summary>         
-    
-      <h2 class="">Reviews</h2>    
-          <div class="tour-review rating-static"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star-o" aria-hidden="true"></i> <i class="fa fa-star-o" aria-hidden="true"></i> </span> <span class="reviews-count">(3)</span> </div>
-          
-          <div class="review-form">
+    </summary><h2>@if (auth()->check()) Reviews @else Login for Reviews
+               @endif</h2>    
+       @if (auth()->check())
+           <?php 
+           $comment = "block";
+           $login = "none"
+           ?>
+           Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis aperiam eligendi quasi molestiae porro incidunt blanditiis, harum eos. Sit, impedit? Magni, aperiam cupiditate harum ipsum exercitationem dolorem et reprehenderit velit.
 
-            <form action="{{ route('comment')}}" method="post">
-              <input type="hidden" name="post_id" value="{{$posts->id}}">
-              @csrf
+       @else
+       <?php 
+       $comment = "none";
+       $login = "block"
+       ?>
+       @endif
+       <div class="tour-review rating-static" style="display: {{$comment}}"> 
+            
+        <span class="reviews-stars" >
+           <i class="fa fa-star"  onclick="rating(this.getAttribute('attr'))"   attr=1 id="star-1"  aria-hidden="true"></i> 
+           <i class="fa fa-star-o" onclick="rating(this.getAttribute('attr'))" attr=2 id="star-2" aria-hidden="true"></i> 
+           <i class="fa fa-star-o" onclick="rating(this.getAttribute('attr'))"  attr=3 id="star-3" aria-hidden="true"></i> 
+           <i class="fa fa-star-o" onclick="rating(this.getAttribute('attr'))"  attr=4 id="star-4" aria-hidden="true"></i> 
+           <i class="fa fa-star-o" onclick="rating(this.getAttribute('attr'))"  attr=5 id="star-5"  aria-hidden="true"></i> 
+          </span> 
+         </div>
+      
+      <div class="review-form">
+
+        <form action="{{ route('comment')}}" method="post" style="display:{{$comment}}">
+          @csrf
+          <input type="hidden" name="post_id" value="{{$posts->id}}">
+          <input type="hidden" name="star" id="star" value="1">
+
           <div class="form-group">
-     <textarea id="review" class="form-control" name="message" placeholder="Write a review..."></textarea> 
-     </div>
-     
-      <div class="form-group">
-       <button class="btn submit-btn" type="submit">Submit</button>
-       </div>
-            </form>
+            <textarea id="review" class="form-control" name="message" placeholder="Write a review..."></textarea> 
+          </div>
+            
+          <div class="form-group">
+              <button class="btn submit-btn" type="submit">Submit</button>
+            </div>
+        </form>
+           <h4><a href="{{route('login')}}" style="display: {{$login}}">Login</a></h4>
        <div class="body_comment">
               <ul id="list_comment" class="col-xs-12">
                 @foreach($comments as $data)
                 <!-- Start List Comment 1 -->
                 <li class="box_result">
-                  <div class="avatar_comment"> <img src="{{ asset('frontend/images/avatar.jpg') }}" alt="avatar"/> </div>
+                  <div class="avatar_comment"> <img src="{{ asset('frontend/images/avatar.jpg') }}" alt="avatar"/>  </div>
                   <div class="result_comment">
-                    <h4>Nath Ryuzaki</h4>
+                    <h4>{{$data->name}}</h4>
+                    <div class="tour-review rating-static">
+                       <span class="reviews-stars">
+                        <?php
+                        $x = $data->star;
+                        while($x > 0) {
+                        echo '<i class="fa fa-star" aria-hidden="true"></i> ';
+                        $x--;
+                        }
+                        $y = 5-$data->star;
+                      // echo $;
+                      while($y > 0) {
+                      echo '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                      $y--;
+                      }
+                    ?>
+                      </span> 
+                    </div>
                     <p>{{ $data->message }}</p>
-                    <div class="tools_comment"> <a class="like" href="#">Like</a> <!--<a class="replay" href="#">Reply</a>--> <i class="fa fa-thumbs-o-up"></i> <span class="count">1</span> <span class="comment-time">5m ago</span> </div>
-                  </div>
+                    <div class="tools_comment">  
+                      <span class="comment-time">{{$data->created_at->diffForHumans()}}</span> </div>
+                    </div>
                 </li> 
               @endforeach
               </ul>
-              <div class="col-xs-12">
-              <button class="show_more_btn btn" type="button">VIEW MORE COMMENTS</button>
-              </div>
             </div>
-      
-        </form>
-     </div>   
-        </div>
-
-      
+        </div>   
+      </div>
         <div class="col col-sm-4">
-        <h2 class="">{{ $posts->title }}</h2>
-  <div class="tour-review rating-static"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star-o" aria-hidden="true"></i> <i class="fa fa-star-o" aria-hidden="true"></i> </span> <span class="reviews-count">(3)</span> </div>
-  
-  
-  <div class="tour-price mt-3"><span>{{ $posts->price }}</span>   </div>
-  
-  <div class="price-neg mt-3"> <b>Price Negotiable:</b>&nbsp;<span>{{ $posts->price_type }}</span>
-    <div class="mt-3">
-  <button class="btn view_btn book-btn"type="submit">Book now</button>
-  </div>
-  
-   <div class="mt-4">
-          <ul class="social_icons">
-            <li><a href="#" title=""><i class="fab fa-facebook-f"></i></a></li>
-            <li><a href="#" title=""><i class="fab fa-twitter"></i> </a></li>
-            <li><a href="#" title=""><i class="fab fa-instagram"></i> </a></li>
-          </ul>
-   </div>
+          <h2 class="">{{ $posts->title }}</h2>
+          <div class="tour-review rating-static"> 
+            <span class="reviews-stars"> 
+             
+              <?php
+                  $x = $avag_star_rating;
+                  
+                  while($x > 0) {
+                  echo '<i class="fa fa-star" aria-hidden="true"></i>';
+                  $x--;
+                  }
+                  $y = 5-$avag_star_rating;
+                  // echo $;
+                  while($y > 0) {
+                  echo '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                  $y--;
+                  }
+              ?>
+            </span> 
+            <span class="reviews-count">({{$avag_rating}})</span> </div>
+            <div class="tour-price mt-3"><span>{{ $posts->price }}</span>   </div>
+              <div class="price-neg mt-3"> <b>Price Negotiable:</b>&nbsp;<span>{{ $posts->price_type }}</span>
+                <div class="mt-3">
+                  <form action="{{route('add.cart')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="post_id" id="" value="{{ $posts->id }}">
+                    <input type="hidden" name="title" id="" value="{{ $posts->title }}">
+                    <input type="hidden" name="price" id="" value="{{ $posts->price }}">
+                    <input type="hidden" name="image" id="" value="{{ $posts->image }}">
+                    <button class="btn view_btn book-btn"type="submit">Book now</button>
+                  </form>
+                </div>
+              <div class="mt-4">
+              <ul class="social_icons">
+                <li><a href="#" title=""><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="#" title=""><i class="fab fa-twitter"></i> </a></li>
+                <li><a href="#" title=""><i class="fab fa-instagram"></i> </a></li>
+              </ul>
+            </div>
         </div>
       </div>
     </div>
   </div>
   </div>
   <!--// footer section starts-->
+  
   
  @endsection

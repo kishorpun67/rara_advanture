@@ -49,7 +49,7 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">View Testimonial</h3>
-              <a href="" data-toggle="modal" data-target="#myModals-add" style="max-width: 150px; float:right; display:inline-block;" class="btn btn-block btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add Testimonial</a>
+              <a href="" data-toggle="modal" data-target="#myModals-add" style="width: auto; float:right; display:inline-block;" class="btn btn-block btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;Add Testimonial</a>
             </div>
             <div class="card-body">
               <table id="categories" class="table table-bordered table-striped" style="text-align: center;">

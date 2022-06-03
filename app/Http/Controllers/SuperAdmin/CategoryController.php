@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function categories()
     {
-        $categories = Category::with(['parentcategory'])->where('admin_id',auth('admin')->user()->id)->get();
+        $categories = Category::where('admin_id',auth('admin')->user()->id)->get();
         Session::flash('page', 'category');
         return view('superAdmin.categories.categories', compact('categories'));
     }
@@ -36,20 +36,13 @@ class CategoryController extends Controller
             $button ="Submit";
             $category = new Category;
             $categorydata = array();
-            $categories = Category::with('subcategories')->where(['parent_id' =>0, 'admin_id'=> auth('admin')->user()->id])->get();
             $categories= json_decode(json_encode($categories),true);
             $message = "Category has been added sucessfully";
         }else{
             $title = "Edit Category";
             $button ="Update";
-            $count = Category::where('admin_id',auth('admin')->user()->id)->where('id',$id)->count();
-            if($count <=0){
-                abort(404);
-            }
             $categorydata = Category::where('admin_id',auth('admin')->user()->id)->where('id',$id)->first();
             $categorydata= json_decode(json_encode($categorydata),true);
-            $categories = Category::with('subcategories')->where(['parent_id' =>0])->get();
-            $categories= json_decode(json_encode($categories),true);
             $category = Category::find($id);
             $message = "Category has been updated sucessfully";
         }
@@ -83,7 +76,6 @@ class CategoryController extends Controller
             // {
             //     $data['parent_id'] = "";
             // }
-            $category->parent_id = $data['parent_id'];
             $category->category = $data['category'];
             $category->url = $data['url'];
             $category->show_header = $data['show_header'];
@@ -98,7 +90,7 @@ class CategoryController extends Controller
             return redirect()->back();
         }
         Session::flash('page', 'category');
-        return view('superAdmin.categories.add_edit_category', compact('title','button','categorydata','categories'));
+        return view('superAdmin.categories.add_edit_category', compact('title','button','categorydata'));
     }
 
     public function deleteCategory($id)

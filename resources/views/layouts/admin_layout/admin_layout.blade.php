@@ -116,6 +116,16 @@
     $("#monthly-charts").DataTable();
   });
 </script>
+<script>
+  $('#carousel').carousel({
+    interval: 5000,
+    cycle: true,
+    pause: "null"
+  }); 
+  </script> 
+  <script type="text/javascript">
+      $('#carousel').bsTouchSlider();
+   </script> 
 @yield('script')
 </body>
 </html>

@@ -1,8 +1,10 @@
 <?php 
 use App\Admin\Admin;
 use App\Admin\Category;
+use App\Contact;
 $admin= Admin::where('id', Session::get('admin_id'))->first();
 $categoy = Category::where('show_header',1)->get();
+$contact = Contact::first();
 
 ?>
 <header class="top_header">
@@ -13,7 +15,7 @@ $categoy = Category::where('show_header',1)->get();
       <ul>
         <li>
           <figure class="icon"> <i class="fas fa-phone-alt"></i> </figure>
-          <div class="details"> <span>01-4123446</span> </div>
+          <div class="details"> <span>{{$contact->hot_line}}</span> </div>
         </li>
         <li>
           <figure class="icon"> <i class="far fa-clock"></i></figure>
@@ -23,9 +25,9 @@ $categoy = Category::where('show_header',1)->get();
       </address>
       <div class="top_social_icons topbar-items">
         <ul>
-          <li><a href="#" title=""><i class="fab fa-facebook-f"></i></a></li>
-          <li><a href="#" title=""><i class="fab fa-twitter"></i> </a></li>
-          <li><a href="#" title=""><i class="fab fa-instagram"></i> </a></li>
+          <li><a target="_blank" href="{{$contact->facebook}}" title=""><i class="fab fa-facebook-f"></i></a></li>
+          <li><a target="_blank" href="{{$contact->twiter}}" title=""><i class="fab fa-twitter"></i> </a></li>
+          <li><a target="_blank" href="{{$contact->instagram}}" title=""><i class="fab fa-instagram"></i> </a></li>
         </ul>
         <div class="form_search">
           <form role="form" action="{{route('search.post.area')}}" method="post">
@@ -65,6 +67,13 @@ $categoy = Category::where('show_header',1)->get();
                         @foreach ($categoy as $item)
                         <li class=""><a href="{{route('post.list', $item->url)}}"> {{$item->category}}</a></li>
                         @endforeach
+                        @if (auth()->check())
+                          <li class=""><a href="{{route('account')}}"><i class="fa fa-user" aria-hidden="true"></i> Account</a></li>
+                        @else                        
+                          <li class=""><a href="{{route('login')}}"> Login</a></li>
+                        @endif
+                        <li class=""><a href="{{route('cart')}}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart</a></li>
+
                       </ul>
                     </div>
                     <!--/.nav-collapse --> 

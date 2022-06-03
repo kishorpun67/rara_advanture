@@ -1,4 +1,9 @@
+<?php 
+use App\Contact;
 
+$contact = Contact::first();
+
+?>
 <!--// footer section starts-->
 
 <footer class="footer pt-6">
@@ -16,9 +21,9 @@
           <div class="footer-social-icons">
             <h4 class="footer_title">Follow Us</h4>
             <ul>
-              <li><a href="#"><i class="fab fa-facebook-f"></i> </a></li>
-              <li><a href="#"><i class="fab fa-twitter"></i> </a></li>
-              <li><a href="#"><i class="fab fa-instagram"></i> </a></li>
+              <li><a href="{{$contact->facebook}}"><i class="fab fa-facebook-f"></i> </a></li>
+              <li><a href="{{$contact->twiter}}"><i class="fab fa-twitter"></i> </a></li>
+              <li><a href="{{$contact->instagram}}"><i class="fab fa-instagram"></i> </a></li>
             </ul>
           </div>
         </div>
@@ -43,7 +48,7 @@
             <li><a href="tailor_made.html">Tailor Made</a></li>
             <li><a href="faqs.html">FAQs</a></li>
             <li><a href="booking_terms.html">Booking Terms</a></li>
-            <li><a href="registration_form.html">Registration Form</a></li>
+            <li><a href="{{route('login')}}">Registration Form</a></li>
           </ul>
         </div>
         <div class="col col-sm-3 col-xs-6">
@@ -53,16 +58,16 @@
             <figure class="icon"><i class="fa fa-home" aria-hidden="true"></i></figure>
             <div class="details"> 
               <!--        <span>Little Buddha College of Health Sciences </span>--> 
-              <span>New Baneshwor</span><br>
-              <span>Kathmandu 44600, Nepal </span> </div>
+              {{-- <span>New Baneshwor</span><br> --}}
+              <span>{{$contact->address}}</span> </div>
             </address>
             <address>
             <figure class="icon"> <i class="fa fa-phone" aria-hidden="true"></i> </figure>
-            <div class="details"> <a class="call" href="tel:01 - 4784458">01 - 4123455</a> ,<a class="quick-call" href="tel:01 - 4784459"> 980-1234567</a> </div>
+            <div class="details"> <a class="call" href="tel:01 - 4784458">{{$contact->hot_line}}</a> ,<a class="quick-call" href="tel:01 - 4784459"> {{$contact->mobile}}</a> </div>
             </address>
             <address>
             <figure class="icon"> <i class="fa fa-envelope" aria-hidden="true"></i> </figure>
-            <div class="details"> <a href="companyname@gmail.com" class="linkto">companyname@gmail.com</a> </div>
+            <div class="details"> <a href="{{$contact->gmail}}" class="linkto">{{$contact->gmail}}</a> </div>
             </address>
           </div>
           <div class="footer-social-icons">

@@ -37,7 +37,41 @@
               </p>
             </a>
           </li>
-          @if(Session::get('page')=="setting" || Session::get('page')=="updateAdminDetail" || Session::get('page')=="admin_roles" )
+          
+        
+
+          @if(Session::get('page')=="banner" || Session::get('page')=="category" || Session::get('page')=="post" || Session::get('page')=="testimonial" 
+          )
+          <?php $active = "active";
+          $menuOpen="menu-open"; ?>
+           @else
+           <?php $active = "";
+           $menuOpen=""; ?>
+         @endif
+         <li class="nav-item has-treeview {{$menuOpen ??''}} ">
+           <a href="#" class="nav-link {{$active}}">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+            <p>
+               Catelogue
+               <i class="fas fa-angle-left right"></i>
+               <span class="right badge badge-danger"></span>
+             </p>
+           </a>
+          <ul class="nav nav-treeview">
+            @if(Session::get('page')=="post")
+            <?php $active = "active"; ?>
+            @else
+            <?php $active = ""; ?>
+            @endif
+            <li class="nav-item">
+              <a href="{{route('admin.post')}}" class="nav-link {{$active}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p> View Post  </p>
+              </a>
+            </li>
+          </ul>
+         </li>
+         @if(Session::get('page')=="setting" || Session::get('page')=="updateAdminDetail" || Session::get('page')=="admin_roles" )
            <?php $active = "active";
            $menuOpen="menu-open"; ?>
             @else
@@ -80,96 +114,6 @@
             </ul>
           </li>
               
-          {{-- @if(Session::get('page')=="user")
-          <?php $active = "active";
-          $menuOpen="menu-open"; ?>
-           @else
-           <?php $active = "";
-           $menuOpen=""; ?>
-         @endif
-         <li class="nav-item has-treeview {{$menuOpen ??''}} ">
-           <a href="#" class="nav-link {{$active}}">
-            <i class="fa fa-user" aria-hidden="true"></i>
-            <p>
-               Users
-               <i class="fas fa-angle-left right"></i>
-               <span class="right badge badge-danger"></span>
-             </p>
-           </a>
-           <ul class="nav nav-treeview">
-             @if(Session::get('page')=="user")
-             <?php $active = "active"; ?>
-             @else
-             <?php $active = ""; ?>
-             @endif
-             <li class="nav-item">
-               <a href="{{route('admin.user')}}" class="nav-link {{$active}}">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>View user</p>
-               </a>
-             </li>
-           </ul>
-         </li> --}}
-
-          @if(Session::get('page')=="banner" || Session::get('page')=="category" || Session::get('page')=="post" || Session::get('page')=="testimonial" 
-          )
-          <?php $active = "active";
-          $menuOpen="menu-open"; ?>
-           @else
-           <?php $active = "";
-           $menuOpen=""; ?>
-         @endif
-         <li class="nav-item has-treeview {{$menuOpen ??''}} ">
-           <a href="#" class="nav-link {{$active}}">
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            <p>
-               
-               <i class="fas fa-angle-left right"></i>
-               <span class="right badge badge-danger"></span>
-             </p>
-           </a>
-           <ul class="nav nav-treeview">
-             @if(Session::get('page')=="banner")
-             <?php $active = "active"; ?>
-             @else
-             <?php $active = ""; ?>
-             @endif
-             <li class="nav-item">
-               <a href="{{route('admin.banner')}}" class="nav-link {{$active}}">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>View Banner</p>
-               </a>
-             </li>
-           </ul>
-           <ul class="nav nav-treeview"> --}}
-            @if(Session::get('page')=="category")
-            <?php $active = "active"; ?>
-            @else
-            <?php $active = ""; ?>
-            @endif --}}
-            <li class="nav-item"> 
-              <a href="{{route('admin.categories')}}" class="nav-link {{$active}}"> 
-                <i class="far fa-circle nav-icon"></i> 
-                 <p>View Category</p> 
-                </a> 
-             </li>
-          </ul>
-          
-
-          <ul class="nav nav-treeview">
-            @if(Session::get('page')=="post")
-            <?php $active = "active"; ?>
-            @else
-            <?php $active = ""; ?>
-            @endif
-            <li class="nav-item">
-              <a href="{{route('admin.post')}}" class="nav-link {{$active}}">
-                <i class="far fa-circle nav-icon"></i>
-                <p> View Post  </p>
-              </a>
-            </li>
-          </ul>
-         </li>
         </ul>
           
                 
