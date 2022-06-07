@@ -107,6 +107,32 @@
                   </p>
                 </div>
                 <div class="form-group">
+                  <label for="class"> Price *</label>
+                  <input type="number" class="form-control" name="price" 
+                  @if(!empty($postData['price']))
+                  value= "{{$postData['price']}}"
+                  @else value="{{old('price')}}"
+                  @endif>
+                  <p style="color: red">
+                    @error('price')
+                        {{$message}}
+                    @enderror
+                  </p>
+                </div>
+                <div class="form-group">
+                  <label for="">Appro Tour (days) *</label>
+                    <input type="number" class="form-control" name="price_type"  min=1"" placeholder="Enter Day"
+                    @if(!empty($postData['price_type']))
+                    value= "{{$postData['price_type']}}"
+                    @else value="{{old('price_type')}}"
+                    @endif>       
+                  <p style="color: red">
+                    @error('price_type')
+                        {{$message}}
+                    @enderror
+                  </p>
+                </div>
+                <div class="form-group">
                   <label for="url">Url*</label>
                   <input type="text" class="form-control" id="url" name="url" placeholder="Enter Url"
                   @if(!empty($postData['url']))
@@ -130,33 +156,27 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="class"> Price *</label>
-                  <input type="number" class="form-control" name="price" 
-                  @if(!empty($postData['price']))
-                  value= "{{$postData['price']}}"
-                  @else value="{{old('price')}}"
+                  <label for="start_date"> Start Date *</label>
+                  <input type="date" class="form-control" name="start_date" 
+                  @if(!empty($postData['start_date']))
+                  value= "{{$postData['start_date']}}"
+                  @else value="{{old('start_date')}}"
                   @endif>
                   <p style="color: red">
-                    @error('price')
+                    @error('start_date')
                         {{$message}}
                     @enderror
                   </p>
                 </div>
                 <div class="form-group">
-                  <label for="">Price Type *</label>
-                  <select name="price_type" id="" class="form-control">
-                    <option value="">Select</option>
-                    <option value="Fixed" @if (!empty($postData['price_type']) && $postData['price_type'] == 'Fixed') 
-                      selected=""
-                      @else {{ old('price_type') == "Fixed" ? 'selected' : '' }} 
-                      @endif>Fixed</option>
-                    <option value="Negotiable"@if (!empty($postData['price_type']) && $postData['price_type'] == "Negotiable") 
-                      selected=""
-                      @else {{ old('price_type') == "Fixed" ? 'selected' : '' }} 
-                      @endif>Negotiable</option>
-                  </select>
+                  <label for="end_date"> End Date *</label>
+                  <input type="date" class="form-control" name="end_date" 
+                  @if(!empty($postData['end_date']))
+                  value= "{{$postData['end_date']}}"
+                  @else value="{{old('end_date')}}"
+                  @endif>
                   <p style="color: red">
-                    @error('price_type')
+                    @error('end_date')
                         {{$message}}
                     @enderror
                   </p>

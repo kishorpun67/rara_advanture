@@ -32,6 +32,9 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
   <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+  <style>
+       
+  </style>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

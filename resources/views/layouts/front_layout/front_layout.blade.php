@@ -31,6 +31,8 @@
 <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/side_nav.css')}}" />
 <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/navbar.css')}}"/>
 <link rel="stylesheet" type="text/css" href="{{asset('frontend/css/responsive.css')}}" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <!-- HTML5 shim and Respond.js')}} for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js')}} doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -123,6 +125,7 @@ $('.testimonial_content .owl-carousel').owlCarousel({
 <script type="text/javascript" src="{{asset('frontend/js/search_jquery.js')}}"></script> 
 <script type="text/javascript" src="{{asset('frontend/js/touch_jquery.js')}}"></script> 
 <script type="text/javascript" src="{{asset('frontend/js/bootstrap-touch-slider.js')}}"></script> 
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="{{asset('frontend/front_script.js')}}"></script> 
 
 <script type="text/javascript">
@@ -135,6 +138,10 @@ $('.testimonial_content .owl-carousel').owlCarousel({
   <script type="text/javascript">
       $('#carousel').bsTouchSlider();
    </script> 
-</body>
+  <script>
+    $( function() {
+      $( "#datepicker" ).datepicker({ minDate: 0, maxDate: "+1M +15D" });
+    } );
+   </script>
 </html>
 

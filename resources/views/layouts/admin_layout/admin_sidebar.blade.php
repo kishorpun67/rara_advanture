@@ -40,7 +40,7 @@
           
         
 
-          @if(Session::get('page')=="banner" || Session::get('page')=="category" || Session::get('page')=="post" || Session::get('page')=="testimonial" 
+          @if(Session::get('page')=="banner" || Session::get('page')=="category" || Session::get('page')=="post" 
           )
           <?php $active = "active";
           $menuOpen="menu-open"; ?>
@@ -71,7 +71,38 @@
             </li>
           </ul>
          </li>
-         @if(Session::get('page')=="setting" || Session::get('page')=="updateAdminDetail" || Session::get('page')=="admin_roles" )
+         @if(Session::get('page')=="" ||  Session::get('page')=="order" 
+          )
+          <?php $active = "active";
+          $menuOpen="menu-open"; ?>
+           @else
+           <?php $active = "";
+           $menuOpen=""; ?>
+         @endif
+         <li class="nav-item has-treeview {{$menuOpen ??''}} ">
+           <a href="#" class="nav-link {{$active}}">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            <p>
+               Order
+               <i class="fas fa-angle-left right"></i>
+               <span class="right badge badge-danger"></span>
+             </p>
+           </a>
+          <ul class="nav nav-treeview">
+            @if(Session::get('page')=="order")
+            <?php $active = "active"; ?>
+            @else
+            <?php $active = ""; ?>
+            @endif
+            <li class="nav-item">
+              <a href="{{route('admin.order')}}" class="nav-link {{$active}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p> View Order  </p>
+              </a>
+            </li>
+          </ul>
+         </li>
+         @if(Session::get('page')=="setting" )
            <?php $active = "active";
            $menuOpen="menu-open"; ?>
             @else

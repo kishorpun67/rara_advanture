@@ -64,6 +64,7 @@ Route::group(['namespace' => 'SuperAdmin', 'prefix' => 'superAdmin', 'as' => 'su
 
          // testimonial 
          Route::get('tesimonial', 'TestimonialController@testimonial')->name('testimonial');
+         Route::post('update-testimonial-status', 'TestimonialController@updateTestimonialStatus');
          Route::match(['get', 'post'], 'add-edit-testimonial/{id?}', 'TestimonialController@addEditTestimonail')->name('add.edit.testimonial');
          Route::get('delete-testimonial/{id?}', 'TestimonialController@deleteTestimonail')->name('delete.testimonial');
 
@@ -88,6 +89,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'],fun
     Route::match(['get', 'post'], '/', 'AdminController@login')->name('login');
     Route::match(['get', 'post'], '/register', 'AdminController@register')->name('register'); 
     Route::group(['middleware' => ['admin']], function() {
+
         Route::get('dashboard', 'AdminController@dashboard')->name('dashboard');
         Route::get('logout', 'AdminController@logout')->name('logout');
         Route::get('settings', 'AdminController@settings')->name('settings');
@@ -100,9 +102,17 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'],fun
         Route::match(['get', 'post'], 'add-edit-post/{id?}', 'PostController@addEditPost')->name('add.edit.post');
         Route::match(['get', 'post'], 'add-post/{id?}', 'PostController@add')->name('add.post');
         Route::match(['get', 'post'], 'edit-post/{id?}', 'PostController@edit')->name('edit.post');
+        Route::post('update-post-status', 'PostController@updatePostStatus');
         Route::get('delete-post/{id?}', 'PostController@edit');
         Route::match(['get', 'post'], 'add-images/{id?}', 'PostController@addImages')->name('add.post.images');
         Route::get('add-images/delete-image/{id}', 'PostController@deleteImages');
+
+        // route for order controller 
+        Route::get('order', 'OrderController@order')->name('order');
+        Route::match(['get', 'post'], 'order-detail/{id?}', 'OrderController@orderDetail')->name('order.detail');
+        Route::get('order-invoice/{id}', 'OrderController@orderInnovice')->name('order.invoice');
+        Route::get('order-bill/{id}', 'OrderController@orderBill')->name('order.bill');
+
 
 
   

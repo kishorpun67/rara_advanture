@@ -27,15 +27,34 @@
           <form action="{{route('login')}}" method="post">
                 @csrf
             <div class="form-group">
-              <input type="text" class="form-control" name="email" placeholder="Username/email">
+              <input type="text" class="form-control" name="email" placeholder="Username/email" 
+              @if (!empty($_COOKIE['login_email']))
+              value="{{$_COOKIE['login_email']}}"
+              @else
+              value="{{old('email')}}"
+              @endif >
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" name="password"  placeholder="password">
+              <input type="password" class="form-control" name="password"  placeholder="password" 
+              @if (!empty($_COOKIE['login_password']))
+              value="{{$_COOKIE['login_password']}}"
+              @else
+              value="{{old('password')}}"
+              @endif >
             </div>
+            @if (!empty($_COOKIE['login_password'])  && !empty($_COOKIE['login_email']))
+                <?php
+                 $is_checked = "checked='checked'";
+                 ?>
+            @else
+            <?php
+            $is_checked = "";
+            ?>
+            @endif
             <div class="form-group checkbox">
-              <label>
-                <input id="login-remember" type="checkbox" name="remember" value="1">
-                Stay signed in </label>
+              <label for="remember">
+                <input id="remember" type="checkbox" name="remember" {{$is_checked}} >
+                {{ __('Remember me') }}</label>
             </div>
             <button type="submit" class="btn submit-btn btn-login">Sign in</button>
             <div class="form-group forget-text mt-3"> <span>Forgot your password? <a href="forget.html" style="text-decoration:underline;"> Click here</a> to reset your password. </span> </div>

@@ -42,9 +42,9 @@
             </div>
             <div class="filter_item form-group date_filter">
               <label class="label_title">Date:</label>
-              <input type="date" class="form-control" name="name" placeholder="Tile">
+              <input type="date" class="form-control" name="name" id="getDate" placeholder="Tile">
             </div>
-            <div class="filter_item form-group negotiable_filter">
+            {{-- <div class="filter_item form-group negotiable_filter">
               <label class="label_title">Price Type:</label>
               <label>
                 <input type="checkbox" value="Negotiable" class="price_type"  name="p-neg"  id="">
@@ -52,7 +52,7 @@
               <label>
                 <input type="checkbox" value="Fixed" class="price_type"  name="p-neg" id="">
                 <span>Fixed </span> </label>
-            </div>
+            </div> --}}
             
             <div class="filter_item form-group type_filter">
               <label for="room">Tour Types</label>

@@ -60,6 +60,7 @@
                   <th>Profession</th>
                   <th>Image</th>
                     <th>Description</th>
+                    <th>Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -71,6 +72,13 @@
                     <td>{{$testimonial->porfession}}</td>
                     <td><img src="{{asset($testimonial->image)}}" alt="image" width="100" height="100"></td>
                     <td>{{$testimonial->description}}</td>
+                    <td>
+                      @if($testimonial->status==1)
+                        <a  class="updateTestimonialStatus" id="testimonial-{{$testimonial->id}}" testimonial_id="{{$testimonial->id}}"  href="javascript:(0);">Active</a>
+                      @else
+                      <a class="updateTestimonialStatus" id="testimonial-{{$testimonial->id}}" category_id="{{$testimonial->id}}" href="javascript:(0);">Inactive</a>
+                      @endif
+                  </td>
                     <td>
                     <a href=""data-toggle="modal" data-target="#myModal{{$testimonial->id}}" > <i class="fa fa-edit"></i></a>&nbsp;&nbsp;
                     <a href="javascript:" class="delete_form" record="testimonial" rel="{{$testimonial->id}}" style="display:inline;">

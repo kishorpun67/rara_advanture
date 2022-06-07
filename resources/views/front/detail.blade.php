@@ -79,7 +79,6 @@
            $comment = "block";
            $login = "none"
            ?>
-           Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis aperiam eligendi quasi molestiae porro incidunt blanditiis, harum eos. Sit, impedit? Magni, aperiam cupiditate harum ipsum exercitationem dolorem et reprehenderit velit.
 
        @else
        <?php 
@@ -170,15 +169,24 @@
               ?>
             </span> 
             <span class="reviews-count">({{$avag_rating}})</span> </div>
-            <div class="tour-price mt-3"><span>{{ $posts->price }}</span>   </div>
-              <div class="price-neg mt-3"> <b>Price Negotiable:</b>&nbsp;<span>{{ $posts->price_type }}</span>
+            <div class="tour-price mt-3"><span id="post_price">{{ $posts->price }}</span>   </div>
+              <div class="price-neg mt-3">Price varies by group size</span>
+            <div class="price-neg mt-3"> <b><i class="fas fa-clock"></i> {{ $posts->price_type }} days (approx)</b>&nbsp;<span></span>
+
                 <div class="mt-3">
                   <form action="{{route('add.cart')}}" method="post">
                     @csrf
+                    <label for="checkin">Select Date and Travelers</label>
+                    <input type="date" name="checkin" class="form-control" id="" min="{{$posts->start_date}}" max="{{$posts->end_date}}" value=""> 
+                    <label for="number_of_customer">No of Customer</label>
+                    <input name="number_of_customer" class="form-control" type="number"  
+                    id="number_of_customer" placeholder="No of Customer" min="1"  value="1">
+                    <input type="hidden" name="" id="get_post_price" value="{{$posts->price}}">
                     <input type="hidden" name="post_id" id="" value="{{ $posts->id }}">
                     <input type="hidden" name="title" id="" value="{{ $posts->title }}">
-                    <input type="hidden" name="price" id="" value="{{ $posts->price }}">
+                    <input type="hidden" name="price" id="total_price" value="{{ $posts->price }}">
                     <input type="hidden" name="image" id="" value="{{ $posts->image }}">
+                    <br>
                     <button class="btn view_btn book-btn"type="submit">Book now</button>
                   </form>
                 </div>

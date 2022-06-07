@@ -28,9 +28,9 @@
           <tr>
             <th>S.N</th>
             <th>Imae</th>
-            <th>Title</th>
+            <th>Place</th>
             <th>Checkin</th>
-            <th>Checkout</th>
+            <th>Number of Customer</th>
             <th> Price</th>
             <th>Total</th>
           </tr>
@@ -46,7 +46,7 @@
                     <td><a href="#"><img src="{{asset($item->image)}}" width="200" height="150"></a></td>
                     <td>{{$item->title}}</td>
                     <td>{{$item->checkin}}</td>
-                    <td><span class="old-price">{{$item->checkout}} </td>
+                    <td><span class="">{{$item->number_of_customer}} </td>
                     <td>{{$item->price}} </td>
                     <td>{{$item->price}} </td>
                 </tr>
@@ -89,9 +89,9 @@
                     @csrf
                     <input type="hidden" name="total" value="{{$subTotal}}">
                   <div class="form-group stylish-input">
-                    <input type="radio" checked  name="paymentMethod" value="Paypal" data-label="Method 1"  class="a"  id="a"  onclick="return button1();" />
+                    <input type="radio" checked  name="paymentMethod" value="Cash In Hand" data-label="Method 1"  class="a"  id="a"  onclick="return button1();" />
                     <a class=" " href="#"></a>
-                    <label for="paymentMethod1">Paypal &nbsp; &nbsp;<img src="images/paypal.png"></label>
+                    <label for="paymentMethod1">Cash In Hand &nbsp; &nbsp;<img src="images/paypal.png"></label>
                   </div>
                   <div class="form-group stylish-input">
                     <input type="radio"   name="paymentMethod" value="Bank Trasnfer" data-label="Method 2" class="b"  onclick="return button2();" />

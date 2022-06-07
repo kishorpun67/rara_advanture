@@ -132,6 +132,11 @@
                                                 {{$message}}
                                             @enderror
                                         </p>
+
+
+                                        @if (!empty(auth()->user()->image))
+                                           <a href="{{asset(auth()->user()->image)}}">View Image</a>
+                                        @endif
                                     </div>
                       
                                   <div class="form-group">
@@ -143,12 +148,78 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="history">History</div>
-                    <div class="tab-pane" id="order">Order</div>
-
+                    <div class="tab-pane" id="order">
+                      <h3>Order</h3>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Order</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach ($order as $item)
+                              <tr>
+                                <td>{{$item->id}}</td>
+                                <td>{{$item->created_at}}</td>
+                                <td>{{$item->status}}</td>
+                                <td>{{$item->total}}</td>
+                                <th style="text-align: center; padding:8px 0;"><a href="" data-toggle="modal" data-target="#myModal{{$item->id}}" class="btn btn-danger">View</a></th>
+                              </tr>
+                           
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    @foreach ($order as $item)
+
+{{-- <div class="modal fade" id="myModal{{$item->id}}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>SN</th>
+              <th>Place</th>
+              <th>Price</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (!empty($item->orderDetails ))
+              @foreach ($item->orderDetails as $orderdetails)
+             <tr>
+              <td>{{$orderdetails->id}}</td>
+              <td>{{$orderdetails->title}}</td>
+              <td>{{$orderdetails->price}}</td>
+              <td>{{$orderdetails->checkin}}</td>
+              <td>{{$orderdetails->checkout}}</td>
+             </tr>
+              @endforeach
+            @endif
+          </tbody>
+        </table>
+      
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div --}}
+@endforeach
 </section>
 
 @endsection

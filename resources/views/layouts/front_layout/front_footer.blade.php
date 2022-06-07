@@ -67,7 +67,7 @@ $contact = Contact::first();
             </address>
             <address>
             <figure class="icon"> <i class="fa fa-envelope" aria-hidden="true"></i> </figure>
-            <div class="details"> <a href="{{$contact->gmail}}" class="linkto">{{$contact->gmail}}</a> </div>
+            <div class="details"> <a href="#{{$contact->gmail}}" class="linkto">{{$contact->gmail}}</a> </div>
             </address>
           </div>
           <div class="footer-social-icons">

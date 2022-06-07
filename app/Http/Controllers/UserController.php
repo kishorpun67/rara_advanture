@@ -10,6 +10,7 @@ use Hash;
 use Auth;
 use App\Member;
 use Image;
+use App\Order;
 // use App\User;
 
 class UserController extends Controller
@@ -19,8 +20,18 @@ class UserController extends Controller
         if($request->isMethod('post'))
         {
             $data = $request->all();
+            if($request->has('remember')){
+                setcookie('login_email', $data['email'], time()+60*60*24*365);
+                setcookie('login_password', $data['password'], time()+60*60*24*365);
+                $remember_me =true;
+
+            }else{
+                $remember_me =false;
+                setcookie('login_email', null);
+                setcookie('login_password', null);
+            } 
             //return Hash::make(12345);
-            if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+            if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']], $remember_me)) {
                 $session = Str::random(50);
                 Session::put('session', $session);
                 return redirect('/');
@@ -68,7 +79,8 @@ class UserController extends Controller
 
     public function account()
     {
-        return view('front.account');
+        $order = Order::orderBy('id','desc')->with('orderDetails')->where(['user_id'=>auth()->user()->id])->get();
+        return view('front.account', compact('order'));
     }
     public function updateCurrentPassword(Request $request)
     {

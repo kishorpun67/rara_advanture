@@ -7,10 +7,9 @@ use App\Cart;
 use App\Order;
 use Session;
 use App\User;
-// use App\
 use DB;
 use App\Admin\Admin;
-use App\Admin\Item;
+use App\Admin\Post;
 use Carbon\Carbon;
 use Auth;
 use App\OrderDetail;
@@ -27,12 +26,16 @@ class OrderController extends Controller
     public function addCart()
     {
         $data = request()->all();
+        $admin = Post::where('id', $data['post_id'])->first();
         $cart = new Cart();
+        $cart->admin_id = $admin->admin_id;
         $cart->user_id = auth()->user()->id;
         $cart->post_id = $data['post_id'];
         $cart->title = $data['title'];
         $cart->price = $data['price'];
         $cart->image = $data['image'];
+        $cart->number_of_customer = $data['number_of_customer'];
+        $cart->checkin = $data['checkin'];
         $cart->save();
         return redirect()->back();
     }
@@ -73,77 +76,59 @@ class OrderController extends Controller
 
     public function placeOder()
     {
-        // return session()->get('admin_id');
-       return $data = request()->all();
+        $data = request()->all();
         $carts = Cart::where(['user_id'=>auth()->user()->id])->get();
-        //  $carts;
-        foreach($carts as $cart)
-        {
-            // return $cart->item_id;
-            // return$getAttributeCount = Item::checkItem($cart->item_id);
-            // if($getAttributeCount==0) {
-            //     Item::deleteCartCount($cart->id, $session);
-            //     return redirect()->back()->with('error_message','One of the Item is not avaliable. Please try agin.');
-            // }
-            // $stock = Item::checkStock($cart->item_id);
-            // if($cart->quantity > $stock) {
-            //     return redirect()->back()->with('error_message','One of the Item require stock is not avaliable. Please try agin.');
-            // }
-            // Item::deleteCartCount($cart->id, $cart->user_id);
-
-
-            
-
-        }
-        // $checkStatus = Order::where(['user_id'=> auth()->user()->id, 'admin_id'=>session()->get('admn_id')])->latest()->first();
-        // if( empty(session()->get('admin_id')) || $checkStatus->status == "Paid")
+        // foreach($carts as $cart)
         // {
+        //     return $cart->item_id;
+        //     return$getAttributeCount = Item::checkItem($cart->item_id);
+        //     if($getAttributeCount==0) {
+        //         Item::deleteCartCount($cart->id, $session);
+        //         return redirect()->back()->with('error_message','One of the Item is not avaliable. Please try agin.');
+        //     }
+        //     $stock = Item::checkStock($cart->item_id);
+        //     if($cart->quantity > $stock) {
+        //         return redirect()->back()->with('error_message','One of the Item require stock is not avaliable. Please try agin.');
+        //     }
+        //     Item::deleteCartCount($cart->id, $cart->user_id);
+        // }
+        $admin = Cart::select('admin_id')->groupBy('admin_id')->where('user_id', auth()->user()->id)->get();
+        foreach( $admin as $add)
+        {
+            // return $add->admin_id;
             $new  = new Order();
             $new->user_id = auth()->user()->id;
-            $new->admin_id = session()->get('admin_id');
+            $new->admin_id = $add->admin_id;
             $new->name = auth()->user()->name;
-            $new->table_no = session()->get('table_no');
-            $new->floor = session()->get('floor');
+            $new->email = auth()->user()->email;
+            $new->number = auth()->user()->number;
+            $new->total = $data['total'];
+            $new->payment_method = $data['paymentMethod'];
             $new->status = "New";
             $new->save();
             $order_id= DB::getPdo()->lastInsertId();
-        // }else{
-        //     $order_id = $checkStatus->id;
-        // }
-
-        foreach($carts as $cart)
-        {
-            $newOrder = new OrderDetail();
-            $newOrder->order_id = $order_id;
-            $newOrder->admin_id = $cart->admin_id;
-            $newOrder->user_id = $cart->user_id;
-            $newOrder->item_id = $cart->item_id;
-            $newOrder->category_id = $cart->category_id;
-            $newOrder->name = $cart->name;
-            $newOrder->price = $cart->price;
-            $newOrder->cancel = 1;
-            $newOrder->quantity = $cart->quantity;
-            $newOrder->image = $cart->image;
-            $newOrder->message = $cart->message;
-            $newOrder->status = 0;
-            $newOrder->total = ($cart->quantity*$cart->price);
-            $newOrder->save();
-            // Item::deleteSotck($cart->item_id, $cart->quantity);
-            Cart::where('id', $cart->id)->delete();
-        }
-
-         $admin = Admin::where('id', session()->get('admin_id') )->first();
-         $staff = Admin::where('parent_id', session()->get('admin_id') )->get();
-         $letter = collect(['title' => 'New Order by', 'name'=>auth()->user()->name]);
-         $letter = json_decode(json_encode($letter), true);
-         Notification::send($admin, new OrderNotification($letter));
-         foreach($staff as $waiter)
-        {
+            foreach($carts as $cart)
+            {
+                $newOrder = new OrderDetail();
+                $newOrder->order_id = $order_id;
+                $newOrder->admin_id = $add->admin_id;
+                $newOrder->post_id = $cart->post_id;
+                $newOrder->title = $cart->title;
+                $newOrder->price = $cart->price;
+                $newOrder->image = $cart->image;
+                $newOrder->checkin = $cart->checkin;
+                $newOrder->number_of_customer = $cart->number_of_customer;
+                $newOrder->save();
+                // Item::deleteSotck($cart->item_id, $cart->quantity);
+                Cart::where('id', $cart->id)->delete();
+            }
+            $admin = Admin::where('id',$add->admin_id )->first();
             $letter = collect(['title' => 'New Order by', 'name'=>auth()->user()->name]);
             $letter = json_decode(json_encode($letter), true);
-            Notification::send($waiter, new OrderNotification($letter));
+            Notification::send($admin, new OrderNotification($letter));
         }
         return redirect()->route('home');
+
     }
     public function payment()
     {

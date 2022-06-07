@@ -42,9 +42,9 @@
             </div>
             <div class="filter_item form-group date_filter">
               <label class="label_title">Date:</label>
-              <input type="date" class="form-control" name="name" placeholder="Tile">
+              <input type="checkbox" value="Negotiable" class="price_type"  name="p-neg"  id="">
             </div>
-            <div class="filter_item form-group negotiable_filter">
+            {{-- <div class="filter_item form-group negotiable_filter">
               <label class="label_title">Price Type:</label>
               <label>
                 <input type="checkbox" value="Negotiable" class="price_type"  name="p-neg"  id="">
@@ -53,7 +53,7 @@
                 <input type="checkbox" value="Fixed" class="price_type"  name="p-neg" id="">
                 <span>Fixed </span> </label>
             </div>
-            
+             --}}
             <div class="filter_item form-group type_filter">
               <label for="room">Types</label>
               @foreach ($types as $item)

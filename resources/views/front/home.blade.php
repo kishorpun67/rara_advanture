@@ -200,58 +200,59 @@
       <p>Lorem ipsum dolor sit amet consectetur tsed eliectetur adipiscing elitsed </p>
     </div>
     <div class="row mt-5">
+      @forelse ($mostPopularTours as $item)
       <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/thumb2.jpg')}}">
-          <div class="tour-review"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> </span> <span class="reviews-count">(5)</span> </div>
-          <div class="price_box circle_box"> <span>From $49</span> </div>
+        <figure class="expedition_img"> <img src="{{asset($item->image)}}">
+          <div class="box_caption">
+            <h3>{{$popular->title}}</h3>
+          </div>
+          <?php 
+            $rating_sum = Comment::where(['post_id'=>$item->id])->sum('star');
+            $rating_count = Comment::where(['post_id'=>$item->id])->count();
+            if ($rating_count >0) {
+                $avag_rating = round($rating_sum/$rating_count, 2);
+                $avag_star_rating = round($rating_sum/$rating_count);        
+            } else{
+                $avag_rating = 0;
+                $avag_star_rating = 0; 
+            }
+          ?>
+          <div class="tour-review"> 
+            <span class="reviews-stars"> 
+              <?php
+              $x = $avag_star_rating;
+              
+              while($x > 0) {
+              echo '<i class="fa fa-star" aria-hidden="true"></i>';
+              $x--;
+              }
+              $y = 5-$avag_star_rating;
+                // echo $;
+                while($y > 0) {
+                echo '<i class="fa fa-star-o" aria-hidden="true"></i>';
+                $y--;
+              }
+          ?> 
+            </span> <span class="reviews-count">({{$avag_rating}})</span> 
+          </div>
+          <div class="price_box"> <span>From {{$popular->price}}</span> </div>
+          
+          <div class="price_box circle_box"> <span> {{$item->price}}</span> </div>
         </figure>
         </a>
         <figcaption class="expedition_caption">
           <div class="expedition_wrapper">
-            <h4>Special Package</h4>
-            <p>Precise planning with first-hand knowledge defining our high success rate</p>
+            <h4>{{$item->title}}</h4>
+            <p>{{$item->details}}</p>
           </div>
         </figcaption>
       </div>
-      <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/thumb3.jpg')}}">
-          <div class="tour-review"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> </span> <span class="reviews-count">(5)</span> </div>
-          <div class="price_box circle_box"> <span>From $49</span> </div>
-        </figure>
-        </a>
-        <figcaption class="expedition_caption">
-          <div class="expedition_wrapper">
-            <h4>Special Package</h4>
-            <p>Precise planning with first-hand knowledge defining our high success rate</p>
-          </div>
-        </figcaption>
-      </div>
-      <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/thumb1.jpg')}}">
-          <div class="tour-review"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> </span> <span class="reviews-count">(5)</span> </div>
-          <div class="price_box circle_box"> <span>From $49</span> </div>
-        </figure>
-        </a>
-        <figcaption class="expedition_caption">
-          <div class="expedition_wrapper">
-            <h4>Special Package</h4>
-            <p>Precise planning with first-hand knowledge defining our high success rate</p>
-          </div>
-        </figcaption>
-      </div>
-      <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/trip2.jpg')}}">
-          <div class="tour-review"> <span class="reviews-stars"> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i> </span> <span class="reviews-count">(5)</span> </div>
-          <div class="price_box circle_box"> <span>From $49</span> </div>
-        </figure>
-        </a>
-        <figcaption class="expedition_caption">
-          <div class="expedition_wrapper">
-            <h4>Special Package</h4>
-            <p>Precise planning with first-hand knowledge defining our high success rate</p>
-          </div>
-        </figcaption>
-      </div>
+      @empty
+          
+      @endforelse
+  
+ 
+      
     </div>
   </div>
 </section>
@@ -265,42 +266,21 @@
       <h2 class="section_title border">Destinations</h2>
     </div>
     <div class="row mt-5">
+      @forelse ($mostPopularTours as $item)
+
       <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/expedition1.png')}}">
+        <figure class="expedition_img"> <img src="{{asset($item->image)}}">
           <figcaption class="expedition_caption">
             <div class="box_caption">
-              <h3>Brazil</h3>
+              <h3>{{$item->title}}</h3>
             </div>
           </figcaption>
         </figure>
-        </a> </div>
-      <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/expedition2.png')}}">
-          <figcaption class="expedition_caption">
-            <div class="box_caption">
-              <h3>Canada</h3>
-            </div>
-          </figcaption>
-        </figure>
-        </a> </div>
-      <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/expedition3.png')}}">
-          <figcaption class="expedition_caption">
-            <div class="box_caption">
-              <h3>USA</h3>
-            </div>
-          </figcaption>
-        </figure>
-        </a> </div>
-      <div class="col col-md-3 col-sm-4 col-xs-6 mb-5"> <a href="#">
-        <figure class="expedition_img"> <img src="{{asset('frontend/images/expedition4.png')}}">
-          <figcaption class="expedition_caption">
-            <div class="box_caption">
-              <h3>Spain</h3>
-            </div>
-          </figcaption>
-        </figure>
-        </a> </div>
+        </a>
+      </div>
+      @empty
+
+      @endforelse
     </div>
   </div>
 </section>

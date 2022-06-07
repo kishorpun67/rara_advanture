@@ -35,8 +35,8 @@ class PostController extends Controller
             }else {
                 $status = 1;
             }
-            Post::where('id', $data['item_id'])->update(['status' => $status]);
-            return response()->json(['status' =>$status,'item_id' =>$data['item_id']]);
+            Post::where('id', $data['post_id'])->update(['status' => $status]);
+            return response()->json(['status' =>$status,'post_id' =>$data['post_id']]);
         }
     }
     public function addEditPost(Request $request, $id=null)
@@ -73,8 +73,6 @@ class PostController extends Controller
                 'url'=>'required',
                 'price_type'=>'required',
                 'expire_days'=>'required',
-                
-    
             ];
     
             $customMessages = [
@@ -86,10 +84,6 @@ class PostController extends Controller
                 'url.required' => 'Url field is required',
                 'price_type.required' => 'Price Type field is required',
                 'expire_days.required' => 'Please select days',
-
-
-
-    
             ];
             $this->validate($request, $rules, $customMessages);
            
@@ -131,6 +125,8 @@ class PostController extends Controller
             $post->title = $data['title'];
             $post->details = $data['description'];
             $post->price = $data['price'];
+            $post->start_date = $data['start_date'];
+            $post->end_date = $data['end_date'];
             $post->url = $data['url'];
             $post->meta_title = $data['meta_title'];
             $post->meta_description = $data['meta_description'];
@@ -140,7 +136,7 @@ class PostController extends Controller
             // return redirect('su/categories');
             return redirect()->route('admin.post');
         }
-        $categories = Category::get();
+        $categories = Category::where('status',1)->get();
         $types  =TourType::get();
         Session::flash("page", 'post');
         return view('admin.post.add_edit_post', compact('title','button','postData','categories','types'));

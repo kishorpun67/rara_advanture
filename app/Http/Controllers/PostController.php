@@ -17,15 +17,15 @@ class PostController extends Controller
             $sort = $data['sort'];
             $url = $data['url'];
             if($data['category_id'] != 0){
-                $categoy = Category::where('url' ,$url)->first();
-                $posts = Post::where('category_id' , $categoy->id)->where('confirm_status', 'Confirmed');
+                $categoy = Category::where(['url' =>$url,'status'=>1])->first();
+                $posts = Post::where('category_id' , $categoy->id)->where(['confirm_status'=> 'Confirmed', 'status'=>1]);
 
             }else{
                 if(!empty($data['location'])){
-                    $posts = Post::where('title','like', '%'.$data['location'].'%')->where('confirm_status', 'Confirmed');
+                    $posts = Post::where('title','like', '%'.$data['location'].'%')->where(['confirm_status'=> 'Confirmed', 'status'=>1]);
                     // $posts = $posts->where('posts.title','like', '%'.$data['location'].'%');
                 }else{
-                    $posts = Post::where('title','like', '%'.$data['url'].'%')->where('confirm_status', 'Confirmed');
+                    $posts = Post::where('title','like', '%'.$data['url'].'%')->where(['confirm_status'=> 'Confirmed', 'status'=>1]);
                 }
 
             }
@@ -33,6 +33,7 @@ class PostController extends Controller
             if(!empty($data['price_type'])){
                 $posts = $posts->whereIn('posts.price_type', $data['price_type']);
             }
+            
             if(!empty($data['type'])){
                 $posts = $posts->whereIn('posts.type_id', $data['type']);
             }
@@ -59,17 +60,20 @@ class PostController extends Controller
                 }
                 
             }
-            
+            if(!empty($data['date'])){
+                $posts = $posts->where('posts.start_date','<=' ,$data['date'])->where('posts.end_date','>=' ,$data['date']);
+            }
+           
             $posts = $posts->paginate(9);
             return view('front.ajaxListing' , compact('posts'));
         }else{
-            $count = Category::where('url' ,$url)->count();
+            $count = Category::where(['url' =>$url,'status'=>1])->count();
             if($count == 0)
             {
                 return view('error.error');
             }
-            $categoy = Category::where('url' ,$url)->first();
-            $posts = Post::where('category_id' , $categoy->id)->where('confirm_status', 'Confirmed')->get();
+            $categoy = Category::where(['url' =>$url,'status'=>1])->first();
+            $posts = Post::where('category_id' , $categoy->id)->where(['confirm_status'=> 'Confirmed', 'status'=>1])->get();
             $types = TourType::get();
             $meta_title = $categoy->meta_title;
             $meta_keywords = $categoy->meta_keywords;
@@ -82,7 +86,7 @@ class PostController extends Controller
     {
         $data = request()->all();
         $types = TourType::get();
-        $posts = Post::where('title','like', '%'.$data['search'].'%')->where('confirm_status', 'Confirmed')->get();
+        $posts = Post::where('title','like', '%'.$data['search'].'%')->where(['confirm_status'=> 'Confirmed', 'status'=>1])->get();
         $categoy  = $data['search'];
         return view('front.search', compact('posts', 'categoy','types'));
 
@@ -90,9 +94,9 @@ class PostController extends Controller
 
     public function postDetails($url)
     {  
-        $posts = Post::with('images')->where('url', $url)->where('confirm_status', 'Confirmed')->first();
+        $posts = Post::with('images')->where('url', $url)->where(['confirm_status'=> 'Confirmed', 'status'=>1])->first();
         // dd($posts);
-        $comments = Comment::where('post_id', $posts->id)->get();
+        $comments = Comment::orderBy('id','desc')->where('post_id', $posts->id)->get();
         $rating_sum = Comment::where(['post_id'=>$posts->id])->sum('star');
         $rating_count = Comment::where(['post_id'=>$posts->id])->count();
         if ($rating_count >0) {

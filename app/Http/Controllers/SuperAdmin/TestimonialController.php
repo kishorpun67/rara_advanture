@@ -17,6 +17,20 @@ class TestimonialController extends Controller
 
         return view('superAdmin.testimonial.testimonial', compact( 'testimonial'));
     }
+
+    public  function updateTestimonialStatus()
+    {
+        if(request()->ajax()) {
+            $data = request()->all();
+            if($data['status']=="Active") {
+                $status = 0;
+            }else {
+                $status = 1;
+            }
+            TestMonial::where('id', $data['testimonial_id'])->update(['status' => $status]);
+            return response()->json(['status' =>$status,'testimonial_id' =>$data['testimonial_id']]);
+        }
+    }
     public function addEditTestimonail(Request $request, $id=null)
     {
         if($id=="") {

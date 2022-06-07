@@ -3,7 +3,7 @@ use App\Admin\Admin;
 use App\Admin\Category;
 use App\Contact;
 $admin= Admin::where('id', Session::get('admin_id'))->first();
-$categoy = Category::where('show_header',1)->get();
+$categoy = Category::where('show_header',1)->where('status',1)->get();
 $contact = Contact::first();
 
 ?>

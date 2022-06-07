@@ -16,9 +16,10 @@ class HomeController extends Controller
 {
     public function home($url=null)
     {
-        $mostPopularTours = Post::where('confirm_status', 'Confirmed')->limit(5)->get();
+        // return Post::where('id', '>=', '6')->get();
+        $mostPopularTours = Post::where(['confirm_status'=> 'Confirmed', 'status'=>1])->limit(4)->get();
         $banners = Banner::where('status',1)->get();
-        $testimonial = TestMonial::get();
+        $testimonial = TestMonial::where('status',1)->get();
         $choose =Choose::orderBy('id', 'desc')->get();
         $tourType =TourType::orderBy('id', 'desc')->get();
         return view('front.home', compact('banners','testimonial', 'mostPopularTours', 'choose', 'tourType'));
@@ -30,7 +31,7 @@ class HomeController extends Controller
     {
         $data = request()->all();
         // echo 'name';
-        $name = Post::where('title','like', '%'.$data['title'].'%')->where('confirm_status', 'Confirmed')->get();
+        $name = Post::where('title','like', '%'.$data['title'].'%')->where(['confirm_status'=> 'Confirmed', 'status'=>1])->get();
         $output = "<ul>";
             foreach($name as $names)
             {

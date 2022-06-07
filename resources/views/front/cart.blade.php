@@ -31,9 +31,9 @@
           <tr>
             <th>S.N</th>
             <th>Imae</th>
-            <th>Title</th>
+            <th>Place</th>
             <th>Checkin</th>
-            <th>Checkout</th>
+            <th>No of Customer</th>
             <th> Price</th>
             <th>Total</th>
             <th>Remove</th>
@@ -50,7 +50,7 @@
                     <td><a href="#"><img src="{{asset($item->image)}}" width="200" height="150"></a></td>
                     <td>{{$item->title}}</td>
                     <td>{{$item->checkin}}</td>
-                    <td><span class="old-price">{{$item->checkout}} </td>
+                    <td><span class="">{{$item->number_of_customer}} </td>
                     <td>{{$item->price}} </td>
                     <td>{{$item->price}} </td>
 

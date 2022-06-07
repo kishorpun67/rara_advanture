@@ -26,6 +26,8 @@ $(document).ready(function() {
 
     // select sort by post
     $("#sort").change(function() {
+        var date = $("#getDate").val();
+
         var minPrice = $("#min_price").val();
         var maxPrice = $("#max_price").val();
         var location = $("#get_location").val();
@@ -52,6 +54,8 @@ $(document).ready(function() {
                 minPrice: minPrice,
                 maxPrice: maxPrice,
                 category_id: category_id,
+                date: date,
+
 
 
             },
@@ -65,8 +69,54 @@ $(document).ready(function() {
             }
         });
     });
-    // filter for sleeve
+
+    // // sort by date 
+    $("#getDate").on('click', function() {
+
+            var date = $("#getDate").val();
+            // alert(date)
+            var minPrice = $("#min_price").val();
+            var maxPrice = $("#max_price").val();
+            var location = $("#get_location").val();
+            var sort = $("#sort").val();
+            var url = $("#url").val();
+            var category_id = $("#url").attr('category_id');
+
+            console.log("TEST" + date)
+            var price_type = get_filter("price_type");
+            var type = get_filter("type");
+
+            if (sort === "" && url === "") {
+                return false;
+            }
+            $.ajax({
+                type: 'get',
+                url: '/category/',
+                data: {
+                    price_type: price_type,
+                    type: type,
+                    url: url,
+                    sort: sort,
+                    location: location,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice,
+                    category_id: category_id,
+                    date: date,
+                },
+                success: function(response) {
+                    // alert(response);
+                    $(".appendAjaxList").html(response);
+
+                },
+                error: function() {
+                    alert('error');
+                }
+            });
+        })
+        // filter for sleeve
     $(".price_type").on('click', function() {
+        var date = $("#getDate").val();
+
         var minPrice = $("#min_price").val();
         var maxPrice = $("#max_price").val();
         var location = $("#get_location").val();
@@ -93,7 +143,7 @@ $(document).ready(function() {
                 minPrice: minPrice,
                 maxPrice: maxPrice,
                 category_id: category_id,
-
+                date: date,
 
             },
             success: function(response) {
@@ -109,6 +159,8 @@ $(document).ready(function() {
 
     // filter for sleeve
     $(".type").on('click', function() {
+        var date = $("#getDate").val();
+
         var minPrice = $("#min_price").val();
         var maxPrice = $("#max_price").val();
         var url = $("#url").val();
@@ -138,6 +190,8 @@ $(document).ready(function() {
                 minPrice: minPrice,
                 maxPrice: maxPrice,
                 category_id: category_id,
+                date: date,
+
 
             },
             success: function(response) {
@@ -152,6 +206,7 @@ $(document).ready(function() {
     });
 
     $("#get_location").keyup(function() {
+        var date = $("#getDate").val();
         var minPrice = $("#min_price").val();
         var maxPrice = $("#max_price").val();
         var url = $("#url").val();
@@ -177,6 +232,8 @@ $(document).ready(function() {
                 minPrice: minPrice,
                 maxPrice: maxPrice,
                 category_id: category_id,
+                date: date,
+
 
             },
             success: function(response) {
@@ -190,6 +247,7 @@ $(document).ready(function() {
         });
     });
     $("#price_range").click(function(e) {
+        var date = $("#getDate").val();
         var minPrice = $("#min_price").val();
         var maxPrice = $("#max_price").val();
         var url = $("#url").val();
@@ -215,6 +273,7 @@ $(document).ready(function() {
                     minPrice: minPrice,
                     maxPrice: maxPrice,
                     category_id: category_id,
+                    date: date,
 
                 },
                 success: function(response) {
@@ -333,4 +392,12 @@ $(".changeImage").click(function() {
     var image = $(this).attr('src');
     $(".mainImage").attr('src', image);
     // alert(image)
+})
+
+$("#number_of_customer").click(function() {
+    var number_of_customer = $("#number_of_customer").val()
+    var get_post_price = $("#get_post_price").val()
+    var total = number_of_customer * get_post_price;
+    $("#post_price").text(total)
+    $("#total_price").val(total)
 })
